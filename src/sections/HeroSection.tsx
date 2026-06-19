@@ -117,7 +117,7 @@ export default function HeroSection() {
         </div>
 
         <div className="hero-tagline">
-          <p className="font-accent text-bright-blue hero-tagline-text">
+          <p className="font-accent text-coral hero-tagline-text">
             Praxisnah. Sicher. Vor Ort.
           </p>
         </div>
