@@ -529,6 +529,111 @@
   }
 }
 
+.hero-content {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero-copy {
+  position: absolute;
+  top: clamp(128px, 18vh, 190px);
+  left: 5vw;
+  max-width: min(700px, 90vw);
+}
+
+.hero-title {
+  font-size: clamp(52px, 7.5vw, 104px);
+  line-height: 0.88;
+  margin-bottom: 1.5rem;
+}
+
+.hero-description {
+  max-width: 520px;
+  color: #6F6761;
+  font-size: clamp(17px, 1.45vw, 22px);
+  line-height: 1.5;
+}
+
+.hero-tagline {
+  position: absolute;
+  bottom: 5vh;
+  left: 5vw;
+}
+
+.hero-tagline-text {
+  font-size: 24px;
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 12vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.hero-scroll-track {
+  width: 24px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.hero-scroll-track:active {
+  cursor: grabbing;
+}
+
+.hero-scroll-track-line {
+  position: relative;
+  width: 1px;
+  height: 100%;
+  background-color: #A39B94;
+}
+
+.hero-scroll-track-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  background-color: var(--color-brand);
+  pointer-events: none;
+}
+
+.hero-scroll-track-thumb {
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-brand);
+  transform: translateX(-50%);
+  box-shadow: 0 0 0 3px rgba(245, 240, 235, 0.92);
+  pointer-events: none;
+  transition: transform 0.15s ease;
+}
+
+.hero-scroll-track:active .hero-scroll-track-thumb {
+  transform: translateX(-50%) scale(1.15);
+}
+
+.hero-scroll-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 @media (max-width: 1100px) {
   .support-band-grid {
     grid-template-columns: 1fr 1fr !important;
@@ -606,12 +711,41 @@
   }
 
   .site-header {
-    padding: 0.85rem 5vw !important;
+    padding: 0.85rem max(5vw, 16px) !important;
   }
 
   .site-header .btn-primary {
     font-size: 12px !important;
-    padding: 9px 14px !important;
+    padding: 9px 12px !important;
+    white-space: nowrap;
+  }
+
+  .hero-copy {
+    top: calc(66px + 1.25rem) !important;
+    left: max(5vw, 16px) !important;
+    right: max(5vw, 16px) !important;
+    max-width: none !important;
+  }
+
+  .hero-title {
+    font-size: clamp(34px, 10.5vw, 48px) !important;
+    line-height: 0.95 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-description {
+    max-width: none !important;
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+    padding-right: 0.5rem;
+  }
+
+  .hero-tagline {
+    display: none !important;
+  }
+
+  .hero-scroll-indicator {
+    bottom: max(24px, env(safe-area-inset-bottom, 0px)) !important;
   }
 
   .title-band {

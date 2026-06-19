@@ -133,15 +133,15 @@ function Scene({
     () =>
       IMAGE_LIST.map((_, i) => {
         const angle = i * 1.35;
-        const baseX = isCompact ? 1.05 : 1.8;
-        const radiusX = isCompact ? 0.72 : 1.15;
-        const baseY = isCompact ? -1.1 : -0.15;
-        const radiusY = isCompact ? 0.42 : 0.95;
+        const baseX = isCompact ? 0 : 1.8;
+        const radiusX = isCompact ? 0.52 : 1.15;
+        const baseY = isCompact ? -0.85 : -0.15;
+        const radiusY = isCompact ? 0.32 : 0.95;
 
         return {
           x: baseX + Math.sin(angle) * radiusX,
           y: baseY + Math.cos(angle) * radiusY,
-          z: (isCompact ? -1.55 : -1.15) - i * CARD_SPACING,
+          z: (isCompact ? -1.45 : -1.15) - i * CARD_SPACING,
         };
       }),
     [isCompact]
@@ -168,14 +168,14 @@ function Scene({
   });
 
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} position={isCompact ? [-0.2, 0.15, 0] : [0, 0, 0]}>
       {textures.map((tex, i) => (
         <Card
           key={i}
-          height={isCompact ? 1.36 : CARD_WORLD_HEIGHT}
+          height={isCompact ? 1.18 : CARD_WORLD_HEIGHT}
           position={[items[i].x, items[i].y, items[i].z]}
           texture={tex}
-          width={isCompact ? 1.82 : CARD_WORLD_WIDTH}
+          width={isCompact ? 1.58 : CARD_WORLD_WIDTH}
         />
       ))}
     </group>
@@ -192,7 +192,7 @@ export default function TunnelCanvas({
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 50 }}
+        camera={{ position: isCompact ? [0, -0.12, 5.15] : [0, 0, 5], fov: isCompact ? 54 : 50 }}
         gl={{ outputColorSpace: SRGBColorSpace, alpha: true, antialias: true }}
         style={{ width: '100%', height: '100%' }}
       >
