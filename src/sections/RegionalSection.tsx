@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { MapPin } from 'lucide-react';
 import { useSectionReveal } from '../hooks/useSectionReveal';
+import { publicAsset } from '@/lib/publicAsset';
 
 export default function RegionalSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -74,7 +75,7 @@ export default function RegionalSection() {
           }}
         >
           <img
-            src="/images/karlsruhe-map.jpg"
+            src={publicAsset('/images/karlsruhe-map.jpg')}
             alt="Karlsruhe Region"
             style={{
               width: '100%',

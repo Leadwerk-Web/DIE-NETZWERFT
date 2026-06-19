@@ -2,20 +2,21 @@ import { useRef, useMemo, forwardRef } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { DoubleSide, MathUtils, SRGBColorSpace, TextureLoader, Vector3 } from 'three';
 import * as THREE from 'three';
+import { publicAsset } from '@/lib/publicAsset';
 
 const IMAGE_LIST = [
-  '/images/service-t2med.jpg',
-  '/images/service-praxis-it.jpg',
-  '/images/service-telefonie.jpg',
-  '/images/service-sicherheit.jpg',
-  '/images/service-cloud.jpg',
-  '/images/service-digital.jpg',
-  '/images/service-practice-interior.jpg',
-  '/images/client-1.jpg',
-  '/images/client-2.jpg',
-  '/images/service-t2med.jpg',
-  '/images/service-praxis-it.jpg',
-  '/images/service-telefonie.jpg',
+  publicAsset('/images/service-t2med.jpg'),
+  publicAsset('/images/service-praxis-it.jpg'),
+  publicAsset('/images/service-telefonie.jpg'),
+  publicAsset('/images/service-sicherheit.jpg'),
+  publicAsset('/images/service-cloud.jpg'),
+  publicAsset('/images/service-digital.jpg'),
+  publicAsset('/images/service-practice-interior.jpg'),
+  publicAsset('/images/client-1.jpg'),
+  publicAsset('/images/client-2.jpg'),
+  publicAsset('/images/service-t2med.jpg'),
+  publicAsset('/images/service-praxis-it.jpg'),
+  publicAsset('/images/service-telefonie.jpg'),
 ];
 
 const CARD_WORLD_WIDTH = 2.35;

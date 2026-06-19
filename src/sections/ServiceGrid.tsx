@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { publicAsset } from '@/lib/publicAsset';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -8,37 +9,37 @@ const services = [
   {
     title: 'T2Med Software',
     description: 'Einrichtung, Migration und laufende Betreuung für Praxissoftware.',
-    image: '/images/service-t2med.jpg',
+    image: publicAsset('/images/service-t2med.jpg'),
     accent: true,
   },
   {
     title: 'Praxis-IT',
     description: 'Arbeitsplätze, Server, Netzwerk und Wartung aus einer Hand.',
-    image: '/images/service-praxis-it.jpg',
+    image: publicAsset('/images/service-praxis-it.jpg'),
     accent: false,
   },
   {
     title: 'Telefonie',
     description: 'Moderne Kommunikation für Empfang, Team und Sprechzimmer.',
-    image: '/images/service-telefonie.jpg',
+    image: publicAsset('/images/service-telefonie.jpg'),
     accent: false,
   },
   {
     title: 'Sicherheit',
     description: 'Schutzkonzepte, Rechteverwaltung und sichere Patientendaten.',
-    image: '/images/service-sicherheit.jpg',
+    image: publicAsset('/images/service-sicherheit.jpg'),
     accent: false,
   },
   {
     title: 'Cloud & Backup',
     description: 'Ausfallsichere Datensicherung und skalierbare Infrastruktur.',
-    image: '/images/service-cloud.jpg',
+    image: publicAsset('/images/service-cloud.jpg'),
     accent: false,
   },
   {
     title: 'Digitalisierung',
     description: 'Praxisprozesse, Geräte und Schnittstellen sauber verbunden.',
-    image: '/images/service-digital.jpg',
+    image: publicAsset('/images/service-digital.jpg'),
     accent: false,
   },
 ];

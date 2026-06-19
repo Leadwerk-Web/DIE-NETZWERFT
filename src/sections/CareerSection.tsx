@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useSectionReveal } from '../hooks/useSectionReveal';
+import { publicAsset } from '@/lib/publicAsset';
 
 export default function CareerSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -56,7 +57,7 @@ export default function CareerSection() {
           }}
         >
           <img
-            src="/images/team-photo.jpg"
+            src={publicAsset('/images/team-photo.jpg')}
             alt="DIE NETZWERFT Team"
             style={{
               width: '100%',

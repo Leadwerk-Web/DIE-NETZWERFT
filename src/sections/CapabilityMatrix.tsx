@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSectionReveal } from '../hooks/useSectionReveal';
+import { publicAsset } from '@/lib/publicAsset';
 
 const groups = [
   {
@@ -9,12 +10,12 @@ const groups = [
     title: 'Technik und Betrieb',
     description: 'Hard- und Software, Cloud, Datenschutz und sichere Netze aus einer Hand.',
     items: [
-      { title: 'Hardware', copy: 'Arbeitsplätze, Server und Netzwerk sauber geplant.', icon: '/images/legacy/icons/icon-111.png' },
-      { title: 'Cloudservice', copy: 'Standortunabhängiger Zugriff mit reduziertem Ausfallrisiko.', icon: '/images/legacy/icons/icon-nw-27.png' },
-      { title: 'Software', copy: 'Branchensoftware passend zu bestehenden Abläufen.', icon: '/images/legacy/icons/icon-nw-26.png' },
-      { title: 'Multimedia', copy: 'WLAN, Wartezimmer-Screens und Konferenztechnik.', icon: '/images/legacy/icons/icon-nw-32.png' },
-      { title: 'Sicherheit', copy: 'Firewall, Endpoint Protection, VPN und Content Filter.', icon: '/images/legacy/icons/icon-nw-24.png' },
-      { title: 'Datenschutz', copy: 'Begleitung als externer Datenschutzbeauftragter.', icon: '/images/legacy/icons/icon-nw-25.png' },
+      { title: 'Hardware', copy: 'Arbeitsplätze, Server und Netzwerk sauber geplant.', icon: publicAsset('/images/legacy/icons/icon-111.png') },
+      { title: 'Cloudservice', copy: 'Standortunabhängiger Zugriff mit reduziertem Ausfallrisiko.', icon: publicAsset('/images/legacy/icons/icon-nw-27.png') },
+      { title: 'Software', copy: 'Branchensoftware passend zu bestehenden Abläufen.', icon: publicAsset('/images/legacy/icons/icon-nw-26.png') },
+      { title: 'Multimedia', copy: 'WLAN, Wartezimmer-Screens und Konferenztechnik.', icon: publicAsset('/images/legacy/icons/icon-nw-32.png') },
+      { title: 'Sicherheit', copy: 'Firewall, Endpoint Protection, VPN und Content Filter.', icon: publicAsset('/images/legacy/icons/icon-nw-24.png') },
+      { title: 'Datenschutz', copy: 'Begleitung als externer Datenschutzbeauftragter.', icon: publicAsset('/images/legacy/icons/icon-nw-25.png') },
     ],
   },
   {
@@ -22,12 +23,12 @@ const groups = [
     title: 'Software und Medizintechnik',
     description: 'Ausstattung, Praxissoftware und Partnerlösungen für medizinische Workflows.',
     items: [
-      { title: 'T2Med', copy: 'Kernprodukt für moderne Praxisverwaltung.', icon: '/images/legacy/icons/icon-34.png' },
-      { title: 'MyMedax', copy: 'Anamnese, Fragebögen und Einwilligungen auf dem iPad.', icon: '/images/legacy/icons/icon-33.png' },
-      { title: 'teemer', copy: 'Softwarelösung für den Dental-Bereich.', icon: '/images/legacy/icons/teemer-leistung-1.png' },
-      { title: 'Sono & Röntgen', copy: 'Koordination mit Partnerfirmen für Diagnostikgeräte.', icon: '/images/legacy/icons/icon-nw-29.png' },
-      { title: 'Telematikinfrastruktur', copy: 'Installation von TI-Komponenten mit DGN-Partnerstatus.', icon: '/images/legacy/icons/icon-110.png' },
-      { title: 'Medizintechnik', copy: 'Diagnostiklösungen mit spezialisierten Partnern.', icon: '/images/legacy/icons/icon-nw-31.png' },
+      { title: 'T2Med', copy: 'Kernprodukt für moderne Praxisverwaltung.', icon: publicAsset('/images/legacy/icons/icon-34.png') },
+      { title: 'MyMedax', copy: 'Anamnese, Fragebögen und Einwilligungen auf dem iPad.', icon: publicAsset('/images/legacy/icons/icon-33.png') },
+      { title: 'teemer', copy: 'Softwarelösung für den Dental-Bereich.', icon: publicAsset('/images/legacy/icons/teemer-leistung-1.png') },
+      { title: 'Sono & Röntgen', copy: 'Koordination mit Partnerfirmen für Diagnostikgeräte.', icon: publicAsset('/images/legacy/icons/icon-nw-29.png') },
+      { title: 'Telematikinfrastruktur', copy: 'Installation von TI-Komponenten mit DGN-Partnerstatus.', icon: publicAsset('/images/legacy/icons/icon-110.png') },
+      { title: 'Medizintechnik', copy: 'Diagnostiklösungen mit spezialisierten Partnern.', icon: publicAsset('/images/legacy/icons/icon-nw-31.png') },
     ],
   },
   {
@@ -35,12 +36,12 @@ const groups = [
     title: 'Räume, Anlagen und Kommunikation',
     description: 'Gebäude- und Medientechnik, Telefonie und elektrische Prüfungen mitgedacht.',
     items: [
-      { title: 'Videoüberwachung', copy: 'Überwachungstechnik inklusive Fernzugriff per App.', icon: '/images/legacy/icons/icon-nw-20.png' },
-      { title: 'KNX-Programmierung', copy: 'Programmierung von KNX und weiteren Bussystemen.', icon: '/images/legacy/icons/icon-nw-21.png' },
-      { title: 'Elektroinstallation', copy: 'Planung, Sanierung und Installation von Netzen.', icon: '/images/legacy/icons/icon-nw-22.png' },
-      { title: 'Telefonanlagen', copy: 'Warteschleifen, Fax-to-Mail und PC-gestütztes Wählen.', icon: '/images/legacy/icons/icon-nw-19.png' },
-      { title: 'Medientechnik', copy: 'Multimediatechnik für Konferenz- und Schulungsräume.', icon: '/images/legacy/icons/icon-nw-18.png' },
-      { title: 'Elektrische Prüfungen', copy: 'Gesetzlich geforderte Prüfungen, auch an Medizingeräten.', icon: '/images/legacy/icons/icon-35.png' },
+      { title: 'Videoüberwachung', copy: 'Überwachungstechnik inklusive Fernzugriff per App.', icon: publicAsset('/images/legacy/icons/icon-nw-20.png') },
+      { title: 'KNX-Programmierung', copy: 'Programmierung von KNX und weiteren Bussystemen.', icon: publicAsset('/images/legacy/icons/icon-nw-21.png') },
+      { title: 'Elektroinstallation', copy: 'Planung, Sanierung und Installation von Netzen.', icon: publicAsset('/images/legacy/icons/icon-nw-22.png') },
+      { title: 'Telefonanlagen', copy: 'Warteschleifen, Fax-to-Mail und PC-gestütztes Wählen.', icon: publicAsset('/images/legacy/icons/icon-nw-19.png') },
+      { title: 'Medientechnik', copy: 'Multimediatechnik für Konferenz- und Schulungsräume.', icon: publicAsset('/images/legacy/icons/icon-nw-18.png') },
+      { title: 'Elektrische Prüfungen', copy: 'Gesetzlich geforderte Prüfungen, auch an Medizingeräten.', icon: publicAsset('/images/legacy/icons/icon-35.png') },
     ],
   },
 ];
