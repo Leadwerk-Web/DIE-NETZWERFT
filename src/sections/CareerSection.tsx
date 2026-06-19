@@ -10,6 +10,7 @@ export default function CareerSection() {
   return (
     <section
       ref={sectionRef}
+      className="section-pad"
       style={{
         width: '100%',
         backgroundColor: '#F5F0EB',
@@ -19,6 +20,7 @@ export default function CareerSection() {
       }}
     >
       <div
+        className="career-section-grid"
         style={{
           maxWidth: '1180px',
           margin: '0 auto',
@@ -59,6 +61,7 @@ export default function CareerSection() {
           <img
             src={publicAsset('/images/team-photo.jpg')}
             alt="DIE NETZWERFT Team"
+            className="career-section-image"
             style={{
               width: '100%',
               height: '100%',

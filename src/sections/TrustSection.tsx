@@ -28,6 +28,7 @@ export default function TrustSection() {
   return (
     <section
       ref={sectionRef}
+      className="section-pad trust-section"
       style={{
         width: '100%',
         backgroundColor: '#FFFFFF',
@@ -57,6 +58,7 @@ export default function TrustSection() {
             flexWrap: 'wrap',
             marginBottom: '4rem',
           }}
+          className="trust-badges-row"
         >
           {badges.map((badge, i) => (
             <div key={i} data-reveal="item" style={{ textAlign: 'center' }}>

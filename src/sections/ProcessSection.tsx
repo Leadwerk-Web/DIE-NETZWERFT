@@ -91,6 +91,7 @@ export default function ProcessSection() {
   return (
     <section
       ref={sectionRef}
+      className="section-pad"
       style={{
         width: '100%',
         backgroundColor: '#F5F0EB',
@@ -103,6 +104,7 @@ export default function ProcessSection() {
       <svg
         ref={shapeRef}
         viewBox="0 0 500 500"
+        className="process-section-shape"
         style={{
           position: 'absolute',
           width: '420px',
@@ -114,11 +116,11 @@ export default function ProcessSection() {
           left: '52%',
         }}
       >
-        <path ref={pathRef} d={BLOB_SHAPE} fill="#E07452" />
+        <path ref={pathRef} d={BLOB_SHAPE} fill="var(--color-brand)" />
       </svg>
 
       <div style={{ position: 'relative', zIndex: 10, maxWidth: '1120px', margin: '0 auto' }}>
-        <div ref={introRef} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 0.8fr) minmax(0, 1.2fr)', gap: '4rem', alignItems: 'end', marginBottom: '4rem' }}>
+        <div ref={introRef} className="section-heading-grid process-section-intro" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 0.8fr) minmax(0, 1.2fr)', gap: '4rem', alignItems: 'end', marginBottom: '4rem' }}>
           <h2
             className="font-display text-dark-navy"
             style={{
@@ -135,6 +137,7 @@ export default function ProcessSection() {
         </div>
 
         <div
+          className="process-steps-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',

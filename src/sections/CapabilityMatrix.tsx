@@ -82,6 +82,7 @@ export default function CapabilityMatrix() {
     <section
       ref={sectionRef}
       id="kompetenzfelder"
+      className="section-pad"
       style={{
         width: '100%',
         backgroundColor: '#FFFFFF',

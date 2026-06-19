@@ -13,6 +13,7 @@ export default function PartnerSection() {
     <section
       ref={sectionRef}
       id="partner"
+      className="section-pad partner-section"
       style={{
         width: '100%',
         backgroundColor: '#F5F0EB',

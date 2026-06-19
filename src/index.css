@@ -16,19 +16,24 @@
     --secondary-foreground: 225 40% 8%;
     --muted: 30 10% 90%;
     --muted-foreground: 25 8% 60%;
-    --accent: 14 68% 60%;
+    --accent: 198 100% 19%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 25 8% 60%;
     --input: 30 10% 90%;
-    --ring: 14 68% 60%;
+    --ring: 198 100% 19%;
     --radius: 0.375rem;
 
     --color-dark-navy: #0B0F1C;
     --color-warm-sand: #F5F0EB;
     --color-white: #FFFFFF;
-    --color-coral: #E07452;
+    --color-brand: #004360;
+    --color-brand-hover: #003248;
+    --color-brand-light: #005F85;
+    --color-brand-soft: #4D9DB8;
+    --color-coral: var(--color-brand);
+    --color-coral-hover: var(--color-brand-hover);
     --color-muted-grey: #A39B94;
     --color-bright-blue: #3A7DFF;
     --color-light-grey: #ECECEC;
@@ -119,7 +124,7 @@
     text-decoration: none;
   }
   .btn-coral:hover {
-    background-color: #C96040;
+    background-color: var(--color-brand-hover);
   }
   .btn-bordered-light {
     background-color: transparent;
@@ -283,7 +288,7 @@
 .capability-slider-tab[data-active='true'] {
   color: rgba(255, 255, 255, 0.68);
   background-color: #0B0F1C;
-  box-shadow: inset 0 -3px 0 #E07452;
+  box-shadow: inset 0 -3px 0 var(--color-brand);
 }
 
 .capability-slider-tab[data-active='true'] > span:nth-child(2) {
@@ -525,11 +530,52 @@
 }
 
 @media (max-width: 1100px) {
-  .support-band-grid,
+  .support-band-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .support-band-grid > div:first-child {
+    grid-column: 1 / -1;
+  }
+
   .section-heading-grid,
   .reference-heading-grid,
-  .partner-section-grid {
+  .partner-section-grid,
+  .career-section-grid,
+  .service-grid-intro,
+  .process-section-intro {
     grid-template-columns: 1fr !important;
+  }
+
+  .service-grid-intro {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .service-grid-intro p {
+    margin-bottom: 0 !important;
+    max-width: none !important;
+  }
+
+  .service-grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .process-steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .career-section-grid {
+    gap: 2.5rem !important;
+  }
+
+  .regional-section-content {
+    gap: 2.5rem !important;
+  }
+
+  .regional-section-content > div {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
   }
 
   .capability-slider-panel {
@@ -545,14 +591,118 @@
 }
 
 @media (max-width: 720px) {
+  .section-pad {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+  }
+
+  .client-showcase.section-pad {
+    padding-bottom: 84px !important;
+  }
+
+  .partner-section.section-pad {
+    padding-top: 72px !important;
+    padding-bottom: 80px !important;
+  }
+
+  .site-header {
+    padding: 0.85rem 5vw !important;
+  }
+
+  .site-header .btn-primary {
+    font-size: 12px !important;
+    padding: 9px 14px !important;
+  }
+
+  .title-band {
+    min-height: 180px !important;
+    padding: 0 5vw;
+  }
+
+  .title-band .font-display {
+    font-size: clamp(34px, 11vw, 56px) !important;
+  }
+
   .support-band-grid {
     gap: 10px !important;
+    grid-template-columns: 1fr !important;
   }
 
   .support-band-link {
     border-left: 0 !important;
     border-top: 1px solid rgba(255,255,255,0.12) !important;
     padding: 16px 0 0 !important;
+  }
+
+  .service-grid-cards {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .service-grid-cards article {
+    min-height: 0 !important;
+  }
+
+  .service-grid-cards h3 {
+    font-size: 24px !important;
+  }
+
+  .process-steps-grid {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .process-steps-grid .font-mono {
+    font-size: 36px !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .process-steps-grid h3 {
+    font-size: 24px !important;
+  }
+
+  .career-section-image {
+    min-height: 260px !important;
+  }
+
+  .career-section-grid h2 {
+    font-size: clamp(34px, 9vw, 48px) !important;
+  }
+
+  .trust-section h2 {
+    font-size: 28px !important;
+  }
+
+  .trust-badges-row {
+    gap: 1.75rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .trust-badges-row > div {
+    flex: 1 1 calc(50% - 1rem);
+    min-width: 132px;
+  }
+
+  .regional-section {
+    min-height: 0 !important;
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+  }
+
+  .site-footer {
+    padding-top: 56px !important;
+    padding-bottom: 32px !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .footer-bottom {
+    margin-top: 40px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
   }
 
   .capability-slider-tabs {
@@ -603,6 +753,12 @@
   .reference-toolbar {
     align-items: flex-end;
     flex-wrap: wrap;
+  }
+
+  .process-section-shape {
+    width: 280px !important;
+    height: 280px !important;
+    opacity: 0.08 !important;
   }
 
   .reference-tab-button {

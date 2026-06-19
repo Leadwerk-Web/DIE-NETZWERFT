@@ -55,6 +55,7 @@ export default function TitleBand() {
 
   return (
     <section
+      className="title-band"
       style={{
         width: '100%',
         minHeight: '260px',

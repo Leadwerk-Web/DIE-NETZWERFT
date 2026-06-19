@@ -10,6 +10,7 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
+      className="site-footer"
       style={{
         width: '100%',
         backgroundColor: '#0B0F1C',
@@ -19,6 +20,7 @@ export default function Footer() {
       }}
     >
       <div
+        className="footer-grid"
         style={{
           maxWidth: '1200px',
           margin: '0 auto',
@@ -101,6 +103,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div
         data-reveal="intro"
+        className="footer-bottom"
         style={{
           maxWidth: '1200px',
           margin: '60px auto 0',

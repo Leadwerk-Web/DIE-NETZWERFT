@@ -12,7 +12,7 @@ export default function FinalCTA() {
       style={{
         width: '100%',
         minHeight: '50vh',
-        backgroundColor: '#E07452',
+        backgroundColor: 'var(--color-brand)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -44,7 +44,7 @@ export default function FinalCTA() {
         href="#"
         style={{
           backgroundColor: '#FFFFFF',
-          color: '#E07452',
+          color: 'var(--color-brand)',
           borderRadius: '6px',
           padding: '16px 40px',
           fontFamily: "'Inter', sans-serif",
@@ -61,7 +61,7 @@ export default function FinalCTA() {
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = '#FFFFFF';
-          e.currentTarget.style.color = '#E07452';
+          e.currentTarget.style.color = 'var(--color-brand)';
         }}
       >
         Kostenloses Erstgespräch

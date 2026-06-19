@@ -143,6 +143,7 @@ export default function ClientShowcase() {
     <section
       id="referenzen"
       ref={sectionRef}
+      className="section-pad client-showcase"
       style={{
         width: '100%',
         backgroundColor: '#0B0F1C',
@@ -158,7 +159,7 @@ export default function ClientShowcase() {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(circle at 16% 0%, rgba(224,116,82,0.22), transparent 32%), linear-gradient(135deg, rgba(58,125,255,0.16), transparent 42%)',
+            'radial-gradient(circle at 16% 0%, rgba(0,67,96,0.24), transparent 32%), linear-gradient(135deg, rgba(58,125,255,0.16), transparent 42%)',
           pointerEvents: 'none',
         }}
       />
@@ -237,7 +238,7 @@ export default function ClientShowcase() {
                     className="font-mono"
                     style={{
                       fontSize: '11px',
-                      color: isActive ? '#E07452' : 'rgba(255,255,255,0.58)',
+                      color: isActive ? 'var(--color-brand)' : 'rgba(255,255,255,0.58)',
                     }}
                   >
                     {String(category.items.length).padStart(2, '0')}

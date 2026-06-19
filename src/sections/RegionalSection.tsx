@@ -12,6 +12,7 @@ export default function RegionalSection() {
     <section
       ref={sectionRef}
       id="region"
+      className="section-pad regional-section"
       style={{
         width: '100%',
         minHeight: '60vh',
@@ -25,6 +26,7 @@ export default function RegionalSection() {
       }}
     >
       <div
+        className="regional-section-content"
         style={{
           maxWidth: '1200px',
           margin: '0 auto',
@@ -98,7 +100,7 @@ export default function RegionalSection() {
                 width: '20px',
                 height: '20px',
                 borderRadius: '50%',
-                backgroundColor: '#E07452',
+                backgroundColor: 'var(--color-brand)',
                 position: 'relative',
               }}
               className="pulse-location"

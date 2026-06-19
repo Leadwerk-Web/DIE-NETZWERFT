@@ -148,7 +148,7 @@ export default function HeroSection() {
               width: '6px',
               height: '6px',
               borderRadius: '50%',
-              backgroundColor: '#E07452',
+              backgroundColor: 'var(--color-brand)',
             }}
           />
           <div style={{ width: '120px', height: '1px', backgroundColor: '#A39B94' }} />
@@ -194,7 +194,7 @@ export default function HeroSection() {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                backgroundColor: '#E07452',
+                backgroundColor: 'var(--color-brand)',
                 position: 'absolute',
                 bottom: 0,
                 left: '50%',

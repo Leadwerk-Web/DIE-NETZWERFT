@@ -87,7 +87,7 @@ export default function SupportBand() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#E07452',
+                color: 'var(--color-brand-soft)',
               }}
             >
               <item.icon size={21} strokeWidth={1.7} />

@@ -112,6 +112,7 @@ export default function ServiceGrid() {
   return (
     <section
       ref={sectionRef}
+      className="section-pad"
       style={{
         width: '100%',
         backgroundColor: '#F5F0EB',
@@ -131,7 +132,7 @@ export default function ServiceGrid() {
           [01] Leistungen
         </div>
 
-        <div ref={introRef} style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '3rem', marginBottom: '3rem' }}>
+        <div ref={introRef} className="service-grid-intro" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '3rem', marginBottom: '3rem' }}>
           <h2
             className="font-display text-dark-navy"
             style={{ fontSize: 'clamp(48px, 6vw, 84px)', lineHeight: 0.95, letterSpacing: 0, maxWidth: '760px' }}
@@ -144,6 +145,7 @@ export default function ServiceGrid() {
         </div>
 
         <div
+          className="service-grid-cards"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
@@ -159,7 +161,7 @@ export default function ServiceGrid() {
               }}
               style={{
                 minHeight: '382px',
-                background: service.accent ? '#E07452' : '#FFFFFF',
+                background: service.accent ? 'var(--color-brand)' : '#FFFFFF',
                 color: service.accent ? '#FFFFFF' : '#0B0F1C',
                 borderRadius: '6px',
                 overflow: 'hidden',

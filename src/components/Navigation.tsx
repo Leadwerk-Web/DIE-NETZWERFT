@@ -13,6 +13,7 @@ export default function Navigation() {
 
   return (
     <header
+      className="site-header"
       style={{
         position: 'fixed',
         top: 0,
