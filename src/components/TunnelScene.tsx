@@ -16,12 +16,27 @@ const IMAGE_LIST = [
   publicAsset('/images/client-2.jpg'),
 ];
 
+export const HERO_IMAGE_COUNT = IMAGE_LIST.length;
+export const HERO_SLIDE_INTERVAL_MS = 5000;
+export const HERO_INITIAL_SLIDE_STEPS = 2;
+
+export function getHeroSlideStep() {
+  return 1 / Math.max(HERO_IMAGE_COUNT - 1, 1);
+}
+
+export function getHeroInitialSlideProgress() {
+  return HERO_INITIAL_SLIDE_STEPS * getHeroSlideStep();
+}
+
+export function getHeroTunnelProgress(userProgress: number) {
+  const initialFraction = getHeroInitialSlideProgress();
+  const clamped = Math.max(0, Math.min(1, userProgress));
+  return initialFraction + clamped * (1 - initialFraction);
+}
+
 const CARD_WORLD_WIDTH = 2.35;
 const CARD_WORLD_HEIGHT = 1.76;
 const CARD_SPACING = 1.08;
-const HERO_TUNNEL_SCROLL_FACTOR = 0.016;
-const HERO_TUNNEL_INITIAL_SCROLL_OFFSET_COMPACT = 150;
-const HERO_TUNNEL_INITIAL_SCROLL_OFFSET_DESKTOP = 100;
 const MOBILE_CARD_BASE_Y = -0.8;
 const MOBILE_GROUP_Y = 0.02;
 const MOBILE_STACK_STEP_Y = 0.08;
@@ -122,10 +137,10 @@ Card.displayName = 'Card';
 
 function Scene({
   isCompact,
-  scrollProgress,
+  slideProgress,
 }: {
   isCompact: boolean;
-  scrollProgress: React.MutableRefObject<{ current: number; target: number; ease: number }>;
+  slideProgress: React.MutableRefObject<{ current: number; target: number; ease: number }>;
 }) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -154,35 +169,32 @@ function Scene({
     [isCompact]
   );
 
-  const totalHeight = IMAGE_LIST.length * CARD_SPACING;
+  const totalHeight = (IMAGE_LIST.length - 1) * CARD_SPACING;
   const loggedInitialRef = useRef(false);
 
   useFrame(() => {
     if (!groupRef.current) return;
 
-    const scrollCurrent = scrollProgress.current.current;
-    const initialOffset = isCompact
-      ? HERO_TUNNEL_INITIAL_SCROLL_OFFSET_COMPACT
-      : HERO_TUNNEL_INITIAL_SCROLL_OFFSET_DESKTOP;
-    const effectiveScroll = initialOffset + scrollCurrent;
-    const zScroll = (effectiveScroll * HERO_TUNNEL_SCROLL_FACTOR) % totalHeight;
+    const progress = getHeroTunnelProgress(slideProgress.current.current);
+    const zScroll = progress * totalHeight;
 
     groupRef.current.position.z = zScroll;
 
-    if (!loggedInitialRef.current && scrollCurrent === 0) {
+    if (!loggedInitialRef.current) {
       loggedInitialRef.current = true;
 
       // #region agent log
-      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'unique-images',hypothesisId:'U1',location:'TunnelScene.tsx:useFrame',message:'Hero image list',data:{imageCount:IMAGE_LIST.length,images:IMAGE_LIST,totalHeight},timestamp:Date.now()})}).catch(()=>{});
+      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'slider-zero',hypothesisId:'I3',location:'TunnelScene.tsx:useFrame',message:'Decoupled slider and tunnel',data:{userProgress:slideProgress.current.current,tunnelProgress:progress,zScroll,sliderUI:slideProgress.current.current},timestamp:Date.now()})}).catch(()=>{});
       // #endregion
     }
 
     groupRef.current.children.forEach((child) => {
       const worldPosition = child.getWorldPosition(new Vector3());
+      const loopHeight = IMAGE_LIST.length * CARD_SPACING;
       if (worldPosition.z > 1.25) {
-        child.position.z -= totalHeight;
-      } else if (worldPosition.z < -totalHeight - 1.25) {
-        child.position.z += totalHeight;
+        child.position.z -= loopHeight;
+      } else if (worldPosition.z < -loopHeight - 1.25) {
+        child.position.z += loopHeight;
       }
     });
   });
@@ -205,10 +217,10 @@ function Scene({
 
 export default function TunnelCanvas({
   isCompact = false,
-  scrollProgress,
+  slideProgress,
 }: {
   isCompact?: boolean;
-  scrollProgress: React.MutableRefObject<{ current: number; target: number; ease: number }>;
+  slideProgress: React.MutableRefObject<{ current: number; target: number; ease: number }>;
 }) {
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
@@ -217,7 +229,7 @@ export default function TunnelCanvas({
         gl={{ outputColorSpace: SRGBColorSpace, alpha: true, antialias: true }}
         style={{ width: '100%', height: '100%' }}
       >
-        <Scene isCompact={isCompact} scrollProgress={scrollProgress} />
+        <Scene isCompact={isCompact} slideProgress={slideProgress} />
       </Canvas>
     </div>
   );

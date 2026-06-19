@@ -1,69 +1,54 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import TunnelCanvas from '../components/TunnelScene';
+import TunnelCanvas, {
+  HERO_IMAGE_COUNT,
+  HERO_SLIDE_INTERVAL_MS,
+  getHeroSlideStep,
+} from '../components/TunnelScene';
 import HeroScrollSlider from '../components/HeroScrollSlider';
 import { useIsMobile } from '../hooks/use-mobile';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const HERO_PIN_SCROLL_DISTANCE = '+=75%';
-const HERO_SCROLL_EASE = 0.14;
+const HERO_SLIDE_EASE = 0.12;
+const HERO_AUTOPLAY_PAUSE_MS = 12000;
 
 export default function HeroSection() {
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const scrollProgress = useRef({ current: 0, target: 0, ease: HERO_SCROLL_EASE });
-  const pinRangeRef = useRef({ start: 0, end: 0 });
+  const slideProgress = useRef({ current: 0, target: 0, ease: HERO_SLIDE_EASE });
+  const autoplayPausedUntil = useRef(0);
+
+  const pauseAutoplay = useCallback(() => {
+    autoplayPausedUntil.current = Date.now() + HERO_AUTOPLAY_PAUSE_MS;
+  }, []);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const handleScroll = () => {
-      scrollProgress.current.target = window.scrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    const syncPinRange = (trigger: ScrollTrigger) => {
-      pinRangeRef.current = {
-        start: trigger.start,
-        end: trigger.end,
-      };
-
-      // #region agent log
-      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'scroll-speed',hypothesisId:'H1',location:'HeroSection.tsx:syncPinRange',message:'Hero pin range synced',data:{...pinRangeRef.current,pinDistance:HERO_PIN_SCROLL_DISTANCE},timestamp:Date.now()})}).catch(()=>{});
-      // #endregion
-    };
-
-    const pinTrigger = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      pin: true,
-      scrub: 1,
-      end: HERO_PIN_SCROLL_DISTANCE,
-    });
-
-    syncPinRange(pinTrigger);
-
-    const onRefresh = () => syncPinRange(pinTrigger);
-    ScrollTrigger.addEventListener('refresh', onRefresh);
+    const slideStep = getHeroSlideStep();
 
     let rafId: number;
     const animate = () => {
-      scrollProgress.current.current = gsap.utils.interpolate(
-        scrollProgress.current.current,
-        scrollProgress.current.target,
-        scrollProgress.current.ease
+      slideProgress.current.current = gsap.utils.interpolate(
+        slideProgress.current.current,
+        slideProgress.current.target,
+        slideProgress.current.ease
       );
       rafId = requestAnimationFrame(animate);
     };
     rafId = requestAnimationFrame(animate);
 
+    const autoplayId = window.setInterval(() => {
+      if (Date.now() < autoplayPausedUntil.current) return;
+
+      const nextTarget = slideProgress.current.target + slideStep;
+      slideProgress.current.target = nextTarget > 1 ? 0 : nextTarget;
+
+      // #region agent log
+      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'time-slider',hypothesisId:'T1',location:'HeroSection.tsx:autoplay',message:'Autoplay advance',data:{target:slideProgress.current.target,slideStep,intervalMs:HERO_SLIDE_INTERVAL_MS},timestamp:Date.now()})}).catch(()=>{});
+      // #endregion
+    }, HERO_SLIDE_INTERVAL_MS);
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      ScrollTrigger.removeEventListener('refresh', onRefresh);
-      pinTrigger.kill();
       cancelAnimationFrame(rafId);
+      window.clearInterval(autoplayId);
     };
   }, []);
 
@@ -75,19 +60,9 @@ export default function HeroSection() {
       const canvas = hero?.querySelector('canvas');
       const canvasRect = canvas?.getBoundingClientRect();
       const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const centerX = canvasRect ? canvasRect.left + canvasRect.width / 2 : null;
-      const offsetFromCenter = centerX !== null ? Math.abs(centerX - vw / 2) : null;
-      const inViewport =
-        canvasRect !== undefined &&
-        canvasRect !== null &&
-        canvasRect.left >= 0 &&
-        canvasRect.right <= vw &&
-        canvasRect.top >= 0 &&
-        canvasRect.bottom <= vh;
 
       // #region agent log
-      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'post-fix',hypothesisId:'A-E',location:'HeroSection.tsx:measure',message:'Mobile hero layout',data:{isMobile,vw,vh,canvasRect,centerX,viewportCenterX:vw/2,offsetFromCenter,inViewport,compactMode:true},timestamp:Date.now()})}).catch(()=>{});
+      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'post-fix',hypothesisId:'A-E',location:'HeroSection.tsx:measure',message:'Mobile hero layout',data:{isMobile,vw,slideProgress:slideProgress.current.current,inViewport:!!canvasRect},timestamp:Date.now()})}).catch(()=>{});
       // #endregion
     };
 
@@ -112,7 +87,7 @@ export default function HeroSection() {
         overflow: 'hidden',
       }}
     >
-      <TunnelCanvas isCompact={isMobile} scrollProgress={scrollProgress} />
+      <TunnelCanvas isCompact={isMobile} slideProgress={slideProgress} />
 
       <div
         aria-hidden="true"
@@ -128,7 +103,6 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Overlay content */}
       <div className="hero-content">
         <div className="hero-copy">
           <p className="label-marker" style={{ marginBottom: '1rem' }}>
@@ -142,14 +116,12 @@ export default function HeroSection() {
           </p>
         </div>
 
-        {/* Bottom-left */}
         <div className="hero-tagline">
           <p className="font-accent text-bright-blue hero-tagline-text">
             Praxisnah. Sicher. Vor Ort.
           </p>
         </div>
 
-        {/* Bottom-center */}
         <div
           style={{
             position: 'absolute',
@@ -173,7 +145,6 @@ export default function HeroSection() {
           <div style={{ width: '120px', height: '1px', backgroundColor: '#A39B94' }} />
         </div>
 
-        {/* Bottom-right */}
         <div
           style={{
             position: 'absolute',
@@ -187,10 +158,10 @@ export default function HeroSection() {
           </p>
         </div>
 
-        {/* Center scroll indicator */}
         <HeroScrollSlider
-          pinRangeRef={pinRangeRef}
-          scrollProgress={scrollProgress}
+          imageCount={HERO_IMAGE_COUNT}
+          onSeek={pauseAutoplay}
+          slideProgress={slideProgress}
         />
       </div>
     </section>

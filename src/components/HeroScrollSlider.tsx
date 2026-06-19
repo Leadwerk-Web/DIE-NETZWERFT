@@ -1,30 +1,21 @@
 import { useEffect, useRef } from 'react';
 
-type ScrollProgressRef = React.MutableRefObject<{
+export type SlideProgressRef = React.MutableRefObject<{
   current: number;
   target: number;
   ease: number;
 }>;
 
-type PinRangeRef = React.MutableRefObject<{
-  start: number;
-  end: number;
-}>;
-
 type HeroScrollSliderProps = {
-  pinRangeRef: PinRangeRef;
-  scrollProgress: ScrollProgressRef;
+  imageCount: number;
+  onSeek: () => void;
+  slideProgress: SlideProgressRef;
 };
 
-function getProgress(scrollY: number, start: number, end: number) {
-  const range = end - start;
-  if (range <= 0) return 0;
-  return Math.max(0, Math.min(1, (scrollY - start) / range));
-}
-
 export default function HeroScrollSlider({
-  pinRangeRef,
-  scrollProgress,
+  imageCount,
+  onSeek,
+  slideProgress,
 }: HeroScrollSliderProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
@@ -35,8 +26,7 @@ export default function HeroScrollSlider({
     let rafId = 0;
 
     const tick = () => {
-      const { start, end } = pinRangeRef.current;
-      const progress = getProgress(scrollProgress.current.current, start, end);
+      const progress = Math.max(0, Math.min(1, slideProgress.current.current));
 
       if (thumbRef.current) {
         thumbRef.current.style.bottom = `calc(${progress * 100}% - 3px)`;
@@ -50,7 +40,7 @@ export default function HeroScrollSlider({
 
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, [pinRangeRef, scrollProgress]);
+  }, [slideProgress]);
 
   const seekFromPointer = (clientY: number) => {
     const track = trackRef.current;
@@ -58,17 +48,13 @@ export default function HeroScrollSlider({
 
     const rect = track.getBoundingClientRect();
     const ratio = 1 - Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
-    const { start, end } = pinRangeRef.current;
-    const range = end - start;
-    if (range <= 0) return;
 
-    const scrollY = start + ratio * range;
-    window.scrollTo({ top: scrollY, behavior: 'auto' });
-    scrollProgress.current.target = scrollY;
-    scrollProgress.current.current = scrollY;
+    slideProgress.current.target = ratio;
+    slideProgress.current.current = ratio;
+    onSeek();
 
     // #region agent log
-    fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'slider-compact',hypothesisId:'S3',location:'HeroScrollSlider.tsx:seek',message:'Hero slider seek',data:{ratio,scrollY,start,end,trackHeight:track.getBoundingClientRect().height},timestamp:Date.now()})}).catch(()=>{});
+    fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'time-slider',hypothesisId:'T2',location:'HeroScrollSlider.tsx:seek',message:'Slider seek',data:{ratio,slideIndex:Math.round(ratio*(imageCount-1)),imageCount},timestamp:Date.now()})}).catch(()=>{});
     // #endregion
   };
 
