@@ -148,7 +148,7 @@ export default function CapabilityMatrix() {
               <p className="font-mono text-coral" style={{ fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.8rem' }}>
                 {activeGroup.eyebrow}
               </p>
-              <h3 className="font-display text-dark-navy" style={{ fontSize: 'clamp(34px, 4vw, 52px)', lineHeight: 0.98, letterSpacing: 0, marginBottom: '1rem' }}>
+              <h3 className="font-display text-dark-navy capability-slider-title" style={{ letterSpacing: 0, marginBottom: '1rem' }}>
                 {activeGroup.title}
               </h3>
               <p style={{ color: '#6F6761', fontSize: '16px', lineHeight: 1.55, maxWidth: '390px' }}>

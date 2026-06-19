@@ -292,16 +292,26 @@
 
 .capability-slider-panel {
   display: grid;
-  grid-template-columns: minmax(260px, 0.58fr) minmax(0, 1.42fr);
+  grid-template-columns: minmax(280px, 0.62fr) minmax(0, 1.38fr);
   min-height: 430px;
 }
 
 .capability-slider-summary {
+  min-width: 0;
   padding: 38px 34px;
   border-right: 1px solid rgba(163, 155, 148, 0.3);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.capability-slider-summary h3 {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  hyphens: none;
+  line-height: 1.15;
+  font-size: clamp(24px, 2.4vw, 36px);
 }
 
 .capability-slider-summary .slider-control-row {
