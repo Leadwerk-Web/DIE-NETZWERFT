@@ -17,7 +17,7 @@ const IMAGE_LIST = [
 ];
 
 export const HERO_IMAGE_COUNT = IMAGE_LIST.length;
-export const HERO_SLIDE_INTERVAL_MS = 5000;
+export const HERO_SLIDE_INTERVAL_MS = 3000;
 export const HERO_INITIAL_SLIDE_STEPS = 2;
 
 export function getHeroSlideStep() {
