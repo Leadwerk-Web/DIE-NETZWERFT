@@ -3,22 +3,19 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'assets/**'
-      - 'images/**'
-      - 'index.html'
-      - '.nojekyll'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,23 +37,18 @@ jobs:
         env:
           GITHUB_ACTIONS: true
 
-      - name: Publish build to repository root
-        run: |
-          cp dist/index.html index.html
-          rm -rf assets images
-          cp -r dist/assets assets
-          cp -r dist/images images
-          touch .nojekyll
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
-      - name: Commit and push deployment
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html assets images .nojekyll
-          if git diff --staged --quiet; then
-            echo "Build unchanged — creating empty commit to trigger GitHub Pages rebuild."
-            git commit --allow-empty -m "chore: trigger GitHub Pages rebuild"
-          else
-            git commit -m "chore: deploy built site to GitHub Pages"
-          fi
-          git push
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
