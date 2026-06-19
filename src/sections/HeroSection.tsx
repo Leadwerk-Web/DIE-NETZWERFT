@@ -7,10 +7,13 @@ import { useIsMobile } from '../hooks/use-mobile';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const HERO_PIN_SCROLL_DISTANCE = '+=75%';
+const HERO_SCROLL_EASE = 0.14;
+
 export default function HeroSection() {
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const scrollProgress = useRef({ current: 0, target: 0, ease: 0.05 });
+  const scrollProgress = useRef({ current: 0, target: 0, ease: HERO_SCROLL_EASE });
   const pinRangeRef = useRef({ start: 0, end: 0 });
 
   useEffect(() => {
@@ -29,15 +32,15 @@ export default function HeroSection() {
       };
 
       // #region agent log
-      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'slider',hypothesisId:'S2',location:'HeroSection.tsx:syncPinRange',message:'Hero pin range synced',data:pinRangeRef.current,timestamp:Date.now()})}).catch(()=>{});
+      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'scroll-speed',hypothesisId:'H1',location:'HeroSection.tsx:syncPinRange',message:'Hero pin range synced',data:{...pinRangeRef.current,pinDistance:HERO_PIN_SCROLL_DISTANCE},timestamp:Date.now()})}).catch(()=>{});
       // #endregion
     };
 
     const pinTrigger = ScrollTrigger.create({
       trigger: sectionRef.current,
       pin: true,
-      scrub: 2,
-      end: '+=300%',
+      scrub: 1,
+      end: HERO_PIN_SCROLL_DISTANCE,
     });
 
     syncPinRange(pinTrigger);

@@ -1,6 +1,6 @@
 import { useRef, useMemo, forwardRef } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import { DoubleSide, MathUtils, SRGBColorSpace, TextureLoader, Vector3 } from 'three';
+import { DoubleSide, SRGBColorSpace, TextureLoader, Vector3 } from 'three';
 import * as THREE from 'three';
 import { publicAsset } from '@/lib/publicAsset';
 
@@ -14,14 +14,17 @@ const IMAGE_LIST = [
   publicAsset('/images/service-practice-interior.jpg'),
   publicAsset('/images/client-1.jpg'),
   publicAsset('/images/client-2.jpg'),
-  publicAsset('/images/service-t2med.jpg'),
-  publicAsset('/images/service-praxis-it.jpg'),
-  publicAsset('/images/service-telefonie.jpg'),
 ];
 
 const CARD_WORLD_WIDTH = 2.35;
 const CARD_WORLD_HEIGHT = 1.76;
 const CARD_SPACING = 1.08;
+const HERO_TUNNEL_SCROLL_FACTOR = 0.016;
+const HERO_TUNNEL_INITIAL_SCROLL_OFFSET_COMPACT = 150;
+const HERO_TUNNEL_INITIAL_SCROLL_OFFSET_DESKTOP = 100;
+const MOBILE_CARD_BASE_Y = -0.8;
+const MOBILE_GROUP_Y = 0.02;
+const MOBILE_STACK_STEP_Y = 0.08;
 
 const vertexShader = `
   varying vec2 vUv;
@@ -72,13 +75,14 @@ const fragmentShader = `
 
 interface CardProps {
   height: number;
+  renderOrder?: number;
   texture: THREE.Texture;
   position: [number, number, number];
   width: number;
 }
 
-const Card = forwardRef<THREE.Mesh, CardProps>(({ height, texture, position, width }, ref) => {
-  const edgeWidth = useMemo(() => MathUtils.randFloat(0.01, 0.08), []);
+const Card = forwardRef<THREE.Mesh, CardProps>(({ height, renderOrder = 0, texture, position, width }, ref) => {
+  const edgeWidth = 0.03;
   const textureSize = useMemo(() => {
     const image = texture.image as HTMLImageElement | ImageBitmap | undefined;
 
@@ -98,6 +102,7 @@ const Card = forwardRef<THREE.Mesh, CardProps>(({ height, texture, position, wid
   return (
     <mesh
       ref={ref}
+      renderOrder={renderOrder}
       scale={[width, height, 1]}
       position={position}
     >
@@ -132,30 +137,45 @@ function Scene({
   const items = useMemo(
     () =>
       IMAGE_LIST.map((_, i) => {
-        const angle = i * 1.35;
-        const baseX = isCompact ? 0 : 1.8;
-        const radiusX = isCompact ? 0.52 : 1.15;
-        const baseY = isCompact ? -0.85 : -0.15;
-        const radiusY = isCompact ? 0.32 : 0.95;
+        if (isCompact) {
+          return {
+            x: 0,
+            y: MOBILE_CARD_BASE_Y + i * MOBILE_STACK_STEP_Y,
+            z: -1.45 - i * CARD_SPACING,
+          };
+        }
 
         return {
-          x: baseX + Math.sin(angle) * radiusX,
-          y: baseY + Math.cos(angle) * radiusY,
-          z: (isCompact ? -1.45 : -1.15) - i * CARD_SPACING,
+          x: 1.8,
+          y: 0.14,
+          z: -1.15 - i * CARD_SPACING,
         };
       }),
     [isCompact]
   );
 
   const totalHeight = IMAGE_LIST.length * CARD_SPACING;
+  const loggedInitialRef = useRef(false);
 
   useFrame(() => {
     if (!groupRef.current) return;
 
     const scrollCurrent = scrollProgress.current.current;
-    const zScroll = (scrollCurrent * 0.004) % totalHeight;
+    const initialOffset = isCompact
+      ? HERO_TUNNEL_INITIAL_SCROLL_OFFSET_COMPACT
+      : HERO_TUNNEL_INITIAL_SCROLL_OFFSET_DESKTOP;
+    const effectiveScroll = initialOffset + scrollCurrent;
+    const zScroll = (effectiveScroll * HERO_TUNNEL_SCROLL_FACTOR) % totalHeight;
 
     groupRef.current.position.z = zScroll;
+
+    if (!loggedInitialRef.current && scrollCurrent === 0) {
+      loggedInitialRef.current = true;
+
+      // #region agent log
+      fetch('http://127.0.0.1:7366/ingest/b36f4b69-b3b7-4b0b-b332-d41c2c52d7db',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8d4886'},body:JSON.stringify({sessionId:'8d4886',runId:'unique-images',hypothesisId:'U1',location:'TunnelScene.tsx:useFrame',message:'Hero image list',data:{imageCount:IMAGE_LIST.length,images:IMAGE_LIST,totalHeight},timestamp:Date.now()})}).catch(()=>{});
+      // #endregion
+    }
 
     groupRef.current.children.forEach((child) => {
       const worldPosition = child.getWorldPosition(new Vector3());
@@ -168,12 +188,13 @@ function Scene({
   });
 
   return (
-    <group ref={groupRef} position={isCompact ? [-0.2, 0.15, 0] : [0, 0, 0]}>
+    <group ref={groupRef} position={isCompact ? [0, MOBILE_GROUP_Y, 0] : [0, 0.19, 0]}>
       {textures.map((tex, i) => (
         <Card
           key={i}
           height={isCompact ? 1.18 : CARD_WORLD_HEIGHT}
           position={[items[i].x, items[i].y, items[i].z]}
+          renderOrder={isCompact ? textures.length - i : 0}
           texture={tex}
           width={isCompact ? 1.58 : CARD_WORLD_WIDTH}
         />
